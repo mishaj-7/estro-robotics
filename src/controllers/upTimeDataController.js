@@ -37,7 +37,7 @@ exports.getUptimeData = async(req, res, next) => {
             duration: new Date() - lastStateTime
           });
         }
-        res.json(result);
+        res.status(200).json(result);
 
       } catch (error) {
         console.error('Error in uptime data API:', error);

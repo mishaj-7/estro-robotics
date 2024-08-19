@@ -4,11 +4,16 @@ const mongoose = require("mongoose");
 const apiRoutes = require("./routes/api");
 const {  APIError } = require('./utils/errors');
 const authRoutes = require('./routes/route.auth')
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./swagger');
 
 const app = express();
 
 // parse json to js
 app.use(express.json());
+
+// docmentation using swagger npm read documentatin
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // mongodb connet
 mongoose

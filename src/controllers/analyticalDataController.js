@@ -73,7 +73,7 @@ exports.getAnalyticalData = async (req, res, next) => {
     if(result.length === 0) {
       throw new APIError('No analytical data found',404)
     }
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
     next(error)  
   }
