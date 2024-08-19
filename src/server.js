@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const apiRoutes = require("./routes/api");
 const {  APIError } = require('./utils/errors');
+const authRoutes = require('./routes/route.auth')
 
 const app = express();
 
@@ -17,6 +18,9 @@ mongoose
   })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB:", err));
+
+// authenticater rote before go to api route
+app.use('/auth', authRoutes)
 
 // api routes here
 app.use("/api", apiRoutes);

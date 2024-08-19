@@ -3,6 +3,11 @@ const router = express.Router();
 const analyticalDataController = require("../controllers/analyticalDataController");
 const uptimeDataController = require('../controllers/upTimeDataController');
 const overallReportController = require('../controllers/overallReportController');
+const auth = require('../middlewares/auth');
+
+//apply auth middleware to all routes
+
+router.use(auth);
 
 
 // Analytical Data API
