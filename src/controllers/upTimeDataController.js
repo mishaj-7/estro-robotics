@@ -1,9 +1,15 @@
 const UptimeData = require("../models/uptimeData");
+const { APIError } = require("../utils/errors");
 
-exports.getUptimeData = async(req, res) => {
+exports.getUptimeData = async(req, res, next) => {
     try {
         const uptimeData = await UptimeData.find().sort({ timestamp: 1 });
         
+        // error handler 
+        if(uptimeData.length === 0) {
+          throw new APIError('No uptime data found', 404);
+        }
+
         let result = [];
         let lastState = null;
         let lastStateTime = null;
@@ -31,10 +37,10 @@ exports.getUptimeData = async(req, res) => {
             duration: new Date() - lastStateTime
           });
         }
-    
         res.json(result);
+
       } catch (error) {
         console.error('Error in uptime data API:', error);
-        res.status(500).json({ error: 'An error occurred while fetching uptime data' });
+        next(error)
       }
 } 

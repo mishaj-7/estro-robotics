@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const apiRoutes = require("./routes/api");
+const {  APIError } = require('./utils/errors');
 
 const app = express();
 
@@ -23,6 +24,32 @@ app.use("/api", apiRoutes);
 // test route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to estro api" });
+});
+
+// 404 error handler
+app.use((req, res, next) => {
+  next(new APIError('Not Found', 404));
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  if (err instanceof APIError) {
+    res.status(err.statusCode).json({
+      error: {
+        message: err.message,
+        status: err.statusCode
+      }
+    });
+  } else {
+    res.status(500).json({
+      error: {
+        message: 'Internal Server Error',
+        status: 500
+      }
+    });
+  }
 });
 
 // server port listen

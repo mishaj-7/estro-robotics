@@ -1,8 +1,9 @@
 const UptimeData = require("../models/uptimeData");
 const AnalyticalData = require("../models/analyticalData");
+const { APIError } = require("../utils/errors");
 
 
-exports.getOverallReport = async (req, res) => {
+exports.getOverallReport = async (req, res, next) => {
     try {
         // Calculate total and average analytical data
         const analyticalSummary = await AnalyticalData.aggregate([
@@ -82,17 +83,25 @@ exports.getOverallReport = async (req, res) => {
           } else if (current.status === 'disconnected') {
             totalDowntime += duration;
           }
+
+          // error handling 
+        if(analyticalSummary.length === 0 || uptimeSummary.length === 0) {
+          throw new APIError('insuficient data to generate report', 404)
+        }
+
         }
     
-        res.json({
+        res.status(200).json({
           analyticalSummary: analyticalSummary[0],
           busiestDays,
           quietestDays,
           uptimeSummary
         });
-    
+
+        
+
       } catch (error) {
         console.error('Error in overall report API:', error);
-        res.status(500).json({ error: 'An error occurred while generating the overall report' });
+        next(error)
       }
-}
+};

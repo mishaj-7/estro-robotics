@@ -1,6 +1,7 @@
 const AnalyticalData = require("../models/analyticalData");
+const { APIError } = require('../utils/errors');
 
-exports.getAnalyticalData = async (req, res) => {
+exports.getAnalyticalData = async (req, res, next) => {
   try {
     const result = await AnalyticalData.aggregate([
       {
@@ -68,11 +69,12 @@ exports.getAnalyticalData = async (req, res) => {
       { $sort: { date: 1 } },
     ]);
 
+    //error handler
+    if(result.length === 0) {
+      throw new APIError('No analytical data found',404)
+    }
     res.json(result);
   } catch (error) {
-    console.error("Error in analytical data API:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching analytical data" });
+    next(error)  
   }
 };
