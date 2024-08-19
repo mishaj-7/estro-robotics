@@ -1,7 +1,3 @@
-POST http://localhost:3000/auth/login
-Content-Type: application/json
+GET http://localhost:3000/api/analytical-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzM0MzU2YWYwYTUzMDc2NGM2MzRkMSIsImlhdCI6MTcyNDA3Mjk4NSwiZXhwIjoxNzI0MDc2NTg1fQ.rgthWocYPyuMkimd4bIBj-FjHC3sKfSMT-srj9FcF_M
 
-{
-  "username": "testuser",
-  "password": "testpassword"
-}
